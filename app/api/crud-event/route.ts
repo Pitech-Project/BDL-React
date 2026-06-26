@@ -126,6 +126,8 @@ export async function POST(req: NextRequest) {
       const uploadsDir = process.env.VERCEL
         ? path.join("/tmp", folder.replace(/^\/+/, ""))
         : path.join(process.cwd(), "public", folder.replace(/^\/+/, ""));
+      console.log("VERCEL:", process.env.VERCEL);
+console.log("uploadsDir:", uploadsDir);
       
       if (!fs.existsSync(uploadsDir))
         fs.mkdirSync(uploadsDir, { recursive: true });
