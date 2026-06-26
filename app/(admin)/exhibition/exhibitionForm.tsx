@@ -184,8 +184,8 @@ export default function ExhibitionForm<T extends BaseFormData>({ initialData, fo
         }
     }
 
-    const width = form === "calendar" || "exhibition" ? 410 : 458;
-    const height = form === "calendar" || "exhibition" ? 360 : 277;
+    const width = form === "calendar" ? 270 : form === "exhibition" ? 410 : 458;
+    const height = form === "calendar" ? 200 : form === "exhibition" ? 360 : 277;
 
     return(
         <>
