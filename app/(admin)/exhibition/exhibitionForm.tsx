@@ -428,7 +428,7 @@ export default function ExhibitionForm<T extends BaseFormData>({ initialData, fo
                             </FileWrapper>
                             <Stack direction="row" justifyContent="space-between" >
                                 <ErrorTypography variant="font_12"  iserror={Boolean(errors.image)}>{errors.image ? errors.image : ""}</ErrorTypography>
-                                <Typography variant="imgText">Image dimensions {form === "calendar" || "exhibition" ? "410X360" : "458X277"}</Typography>
+                                <Typography variant="imgText">Image dimensions {form === "calendar" ? "270X200" : form === "exhibition" ? "410X360" : "458X277"}</Typography>
                             </Stack>
                             
                         </Box>
