@@ -123,7 +123,10 @@ export async function POST(req: NextRequest) {
     const saveFile = async (file: File, folder: string) => {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const uploadsDir = path.join(process.cwd(), `public/${folder}`);
+      const uploadsDir = process.env.VERCEL
+        ? path.join("/tmp", folder.replace(/^\/+/, ""))
+        : path.join(process.cwd(), "public", folder.replace(/^\/+/, ""));
+      
       if (!fs.existsSync(uploadsDir))
         fs.mkdirSync(uploadsDir, { recursive: true });
 
