@@ -114,9 +114,7 @@ export default function ExhibitionForm<T extends BaseFormData>({ initialData, fo
         const contentJSON = rteRef.current?.editor?.getJSON();
         const contentHTML = rteRef.current?.editor?.getHTML();
         const contentText = rteRef.current?.editor?.getText();
-        console.log(contentJSON);
-        console.log(contentHTML);
-        console.log(contentText);
+        
         data.append("title", values.title)
         if (values.upcominglink) {
             data.append("upcominglink", values.upcominglink)
