@@ -103,7 +103,6 @@ export default function useInput<T extends Record<string, FieldValue>>(
         index?: boolean | number,
     ) {
         const { name, value, type } = e.target as HTMLInputElement;
-        console.log(name, value);
         
         if (typeof index === "number") {
             setSubtitles((prev) => {
