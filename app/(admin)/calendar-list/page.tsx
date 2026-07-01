@@ -81,10 +81,10 @@ export default function Calendar() {
             if (res.length === 0) {
                 showSnackbar("Failed to delete", "error")
                 throw new Error("Failed to delete");
-
-            } 
+            } else {
+                showSnackbar("Record deleted successfully", "success")
+            }
             
-            showSnackbar("Record deleted successfully", "success")
             await refresh();
         } finally {
             setOpen(false);
