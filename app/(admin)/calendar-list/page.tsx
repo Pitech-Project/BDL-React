@@ -26,8 +26,8 @@ export default function Calendar() {
     const { getAll, deleteById } = useCrud("/api/crud-event")
     const router = useRouter();
     const [open, setOpen] = useState(false);
-    const [deleteIds, setDeleteIds] = useState<string[]>([]);
     const { showSnackbar } = useSnackbar();
+    const [deleteIds, setDeleteIds] = useState<string[]>([]);
     const [searchText, setSearchText] = useState("");
 
     const filteredRows = (rows ?? []).filter((row) =>
@@ -55,7 +55,7 @@ export default function Calendar() {
     }, [refresh])
 
     const handleEdit = (id: string) => {
-        router.push(`/calendar/edit/${id}`)
+        router.push(/calendar/edit/${id})
     }
 
     const handleDelete = (id: string) => {
@@ -80,10 +80,10 @@ export default function Calendar() {
             if (res.length === 0) {
                 showSnackbar("Failed to delete", "error")
                 throw new Error("Failed to delete");
-            } else {
-                showSnackbar("Record deleted successfully", "success")
+
             }
-            
+            showSnackbar("Record deleted successfully", "success")
+
             await refresh();
         } finally {
             setOpen(false);
@@ -96,8 +96,8 @@ export default function Calendar() {
 
     const dialogTitle = "Delete";
     const dialogMessage = deleteIds.length > 0
-            ? `Are you sure want to delete ${deleteIds.length} calendar events`
-        : `Are you sure want to delete this calendar event`
+            ? Are you sure want to delete ${deleteIds.length} calendar events
+        : Are you sure want to delete this calendar event
 
     return(
         <>
@@ -119,7 +119,7 @@ export default function Calendar() {
                                 <IconWithTooltip 
                                     title="Add" 
                                     icon={<AddIcon />} 
-                                    onClick={() => router.push(`/calendar/add`)}
+                                    onClick={() => router.push(/calendar/add)}
                                 />
                                 <IconWithTooltip 
                                     title="Refresh" 
