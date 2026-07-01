@@ -73,17 +73,18 @@ export default function Calendar() {
     const handleConfirm = async () => {
         try{
             const res = await Promise.all(
-                idsToUpdate.map((id) =>
+                selectedIds.map((id) =>
                     deleteById("calendar", id)
                 )
             );
 
-            if (!res) {
-                throw new Error("Failed to fetch");
-            }
+            if (res.length === 0) {
+                showSnackbar("Failed to delete", "error")
+                throw new Error("Failed to delete");
 
+            } 
+            
             showSnackbar("Record deleted successfully", "success")
-
             await refresh();
         } finally {
             setOpen(false);
