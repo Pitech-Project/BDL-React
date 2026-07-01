@@ -26,9 +26,8 @@ export default function Calendar() {
     const { getAll, deleteById } = useCrud("/api/crud-event")
     const router = useRouter();
     const [open, setOpen] = useState(false);
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
+    const [deleteIds, setDeleteIds] = useState<string[]>([]);
     const { showSnackbar } = useSnackbar();
-    const [idsToUpdate, setIdsToUpdate] = useState<string[]>([]);
     const [searchText, setSearchText] = useState("");
 
     const filteredRows = (rows ?? []).filter((row) =>
@@ -61,19 +60,19 @@ export default function Calendar() {
 
     const handleDelete = (id: string) => {
         setOpen(true);
-        setIdsToUpdate([id]);
+        setDeleteIds([id]);
     }
 
     const handleSelectionChange = (newSelection: GridRowSelectionModel) => {
         const idsArray = Array.from(newSelection.ids).map(String)
         setRowSelectionModel(newSelection)
-        setSelectedIds(idsArray)
+        setDeleteIds(idsArray)
     }
 
     const handleConfirm = async () => {
         try{
             const res = await Promise.all(
-                selectedIds.map((id) =>
+                deleteIds.map((id) =>
                     deleteById("calendar", id)
                 )
             );
@@ -96,8 +95,8 @@ export default function Calendar() {
     }
 
     const dialogTitle = "Delete";
-    const dialogMessage = selectedIds.length > 0
-            ? `Are you sure want to delete ${selectedIds.length} calendar events`
+    const dialogMessage = deleteIds.length > 0
+            ? `Are you sure want to delete ${deleteIds.length} calendar events`
         : `Are you sure want to delete this calendar event`
 
     return(
@@ -108,7 +107,7 @@ export default function Calendar() {
                         <CardHeader title="Calendar List" action={
                             <Stack direction="row">
                                 <SearchButton onChange={handleSearch} />
-                                { selectedIds && selectedIds.length > 1 &&
+                                { deleteIds && deleteIds.length > 1 &&
                                     <IconWithTooltip 
                                         title="Delete" 
                                         icon={<DeleteIcon />} 
