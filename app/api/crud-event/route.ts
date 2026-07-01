@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
 import { ObjectId } from "mongodb";
+import cloudinary from "@/lib/cloudinary";
+import streamifier from "streamifier";
 
 const sanitizeFileName = (name: string) => {
   return name
@@ -120,20 +122,50 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    const saveFile = async (file: File, folder: string) => {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const uploadsDir = process.env.VERCEL
-        ? path.join("/tmp", folder.replace(/^\/+/, ""))
-        : path.join(process.cwd(), "public", folder.replace(/^\/+/, ""));
+    // const saveFile = async (file: File, folder: string) => {
+    //   const bytes = await file.arrayBuffer();
+    //   const buffer = Buffer.from(bytes);
+    //   const uploadsDir = process.env.VERCEL
+    //     ? path.join("/tmp", folder.replace(/^\/+/, ""))
+    //     : path.join(process.cwd(), "public", folder.replace(/^\/+/, ""));
       
-      if (!fs.existsSync(uploadsDir))
-        fs.mkdirSync(uploadsDir, { recursive: true });
+    //   if (!fs.existsSync(uploadsDir))
+    //     fs.mkdirSync(uploadsDir, { recursive: true });
 
-      const filePath = path.join(uploadsDir, file.name);
-      fs.writeFileSync(filePath, new Uint8Array(buffer));
-      return file.type === "application/pdf" ? `${uploadPdfpath}/${file.name}` : `${uploadpath}/${file.name}`;
+    //   const filePath = path.join(uploadsDir, file.name);
+    //   fs.writeFileSync(filePath, new Uint8Array(buffer));
+    //   return file.type === "application/pdf" ? `${uploadPdfpath}/${file.name}` : `${uploadpath}/${file.name}`;
 
+    // };
+
+    const saveFile = async (file: File, folder: string) => {
+      try {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+
+        return new Promise<string>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              folder,
+              resource_type: "auto",
+            },
+            (error, result) => {
+              if (error) {
+                console.error(error);
+                reject(error);
+                return;
+              }
+
+              resolve(result!.secure_url);
+            }
+          );
+
+          streamifier.createReadStream(buffer).pipe(stream);
+        });
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
     };
 
     if (imageFile && (imageFile as File).size > 0) {
